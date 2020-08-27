@@ -21,7 +21,6 @@ export const fetchPokemon = (currentPage, resultsPerPage) => (dispatch) => {
         list.push(pokemonResponse.data);
       }
       dispatch({ type: FETCH_POKEMON_SUCCESS, payload: { list: filterAndSort(list), error: null } });
-      console.log(filterAndSort(list));
     } catch (error) {
       dispatch({ type: FETCH_POKEMON_FAIL, payload: { list: [], error: error } });
     }

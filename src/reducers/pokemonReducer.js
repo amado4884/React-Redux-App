@@ -25,7 +25,7 @@ export const pokemonReducer = (state = initalState, action) => {
     case SET_CURRENT_PAGE:
       return { ...state, currentPage: payload };
     case SET_RESULTS_PER_PAGE:
-      return { ...state, resultsPerPage: payload };
+      return { ...state, resultsPerPage: payload, currentPage: 1 };
     default:
       return state;
   }

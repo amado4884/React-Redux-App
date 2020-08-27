@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import Pokemon from "./components/Pokemon";
-import { connect } from "react-redux";
-import { setCurrentPage, setResultsPerPage, fetchPokemon } from "./actions";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setCurrentPage as SetCurrentPage,
+  setResultsPerPage as SetResultsPerPage,
+  fetchPokemon as FetchPokemon,
+} from "./actions";
 import "./App.css";
 
 const PokemonList = styled.div`
@@ -15,9 +19,18 @@ const PokemonList = styled.div`
   margin: auto;
 `;
 
-function App({ loading, resultsPerPage, currentPage, pokemonList, setCurrentPage, setResultsPerPage, fetchPokemon }) {
+function App() {
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.loading);
+  const pokemonList = useSelector((state) => state.pokemonList);
+  const currentPage = useSelector((state) => state.currentPage);
+  const resultsPerPage = useSelector((state) => state.resultsPerPage);
+  const setCurrentPage = (c) => dispatch(SetCurrentPage(c));
+  const setResultsPerPage = (r) => dispatch(SetResultsPerPage(r));
+  const fetchPokemon = () => dispatch(FetchPokemon(currentPage, resultsPerPage));
+
   useEffect(() => {
-    fetchPokemon(currentPage, resultsPerPage);
+    fetchPokemon();
   }, [currentPage, resultsPerPage]);
   return (
     <div className="App">
@@ -56,19 +69,4 @@ function App({ loading, resultsPerPage, currentPage, pokemonList, setCurrentPage
   );
 }
 
-const mapStateToProps = (state) => ({
-  currentPage: state.currentPage,
-  resultsPerPage: state.resultsPerPage,
-  pokemonList: state.pokemonList,
-  loading: state.loading,
-});
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setCurrentPage: (p) => dispatch(setCurrentPage(p)),
-    setResultsPerPage: (r) => dispatch(setResultsPerPage(r)),
-    fetchPokemon: (c, r) => dispatch(fetchPokemon(c, r)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
